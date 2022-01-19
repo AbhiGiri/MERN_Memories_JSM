@@ -1,1 +1,1 @@
-HEllo merN
+Hello MERN APP (Memories App)
