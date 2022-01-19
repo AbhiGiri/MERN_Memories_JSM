@@ -1,44 +1,41 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { getPosts } from './actions/posts';
+
+import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core';
+import memories from './images/memories.png';
+import Form from './components/Form/Form';
+import Posts from './components/Posts/posts';
+import useStyle from './styles';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const classes = useStyle();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getPosts);
+  }, []);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <Container maxWidth="lg">
+    <AppBar className={classes.appBar} position='static' color='inherit'>
+        <Typography className={classes.heading} variant='h2' align='center'>Memories</Typography>
+        <img className={classes.image} src={memories} alt="memories" height="60" width="60"/>
+      </AppBar>
+      <Grow in> 
+        <Container>
+          <Grid container justify="space-between" alignItems="stretch" spacing={3}>
+            <Grid item xs={12} sm={4}>
+              <Posts />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Form />
+            </Grid>
+          </Grid>
+        </Container>
+      </Grow>
+    </Container>
   )
 }
 
