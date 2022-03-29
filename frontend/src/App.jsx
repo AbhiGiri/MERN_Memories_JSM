@@ -1,41 +1,28 @@
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { Container } from '@material-ui/core';
+import Navbar from './components/Navbar/Navbar';
+import Home from './components/Home/Home';
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
+import Auth from './components/Auth/Auth';
+import PostDetails from './components/postDetails/PostDetails';
 
-import { getPosts } from './actions/posts';
-
-import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core';
-import memories from './images/memories.png';
-import Form from './components/Form/Form';
-import Posts from './components/Posts/posts';
-import useStyle from './styles';
 
 function App() {
-  const classes = useStyle();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getPosts);
-  }, []);
+  
+  const user = JSON.parse(localStorage.getItem('profile'));
   
   return (
-    <Container maxWidth="lg">
-    <AppBar className={classes.appBar} position='static' color='inherit'>
-        <Typography className={classes.heading} variant='h2' align='center'>Memories</Typography>
-        <img className={classes.image} src={memories} alt="memories" height="60" width="60"/>
-      </AppBar>
-      <Grow in> 
-        <Container>
-          <Grid container justify="space-between" alignItems="stretch" spacing={3}>
-            <Grid item xs={12} sm={4}>
-              <Posts />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Form />
-            </Grid>
-          </Grid>
+    <Router>
+        <Container maxWidth="xl">
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<Navigate to={'/posts'}/>}/>
+                <Route path="/posts" element={<Home/>}/>
+                <Route path="/posts/search" element={<Home/>}/>
+                <Route path="/posts/:id" element={<PostDetails/>}/>
+                <Route path="/auth" element={(!user ? <Auth/> : <Navigate to={'/posts'}/>)}/>
+            </Routes>
         </Container>
-      </Grow>
-    </Container>
+      </Router>  
   )
 }
 

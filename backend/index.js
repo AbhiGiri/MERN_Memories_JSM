@@ -1,24 +1,29 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import postRouters from './routes/posts.js';
+import userRouters from './routes/users.js';
 
 const app = express();
-
-//routers
+dotenv.config();
 
 app.use(express.json({limit: "30mb", extended: true }));
 app.use(express.urlencoded({limit: "30mb", extended: true }));
 app.use(cors());
-
+//routers
 app.use('/posts', postRouters);
+app.use('/user', userRouters);
 
+app.get('/', (req, res) => {
+    res.send('App is running...');
+})
 
+const PORT = process.env.PORT || 5000;
 
-const connection_url = 'mongodb+srv://mern:memories@cluster0.8eobg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-mongoose.connect(connection_url, { useUnifiedTopology: true})
+mongoose.connect(process.env.CONNECTION_URL, { useUnifiedTopology: true})
     .then(() => {
-        app.listen(5000, () => {
+        app.listen(PORT, () => {
             console.log('connected to db and listening server at port: 5000');
         });
     })
